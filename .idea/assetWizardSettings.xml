@@ -302,11 +302,26 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/close/baseline_close_24.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_share_5" />
-                            <entry key="sourceFile" value="C:\Users\eemre\Downloads\share (7).svg" />
+                            <entry key="color" value="e01b1b" />
+                            <entry key="outputName" value="ic_close" />
+                            <entry key="sourceFile" value="C:\Users\eemre\Downloads\blank-file-svgrepo-com.svg" />
                           </map>
                         </option>
                       </PersistentState>

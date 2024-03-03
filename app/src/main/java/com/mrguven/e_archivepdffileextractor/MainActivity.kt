@@ -6,11 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.print.PrintAttributes
 import android.print.PrintManager
+import android.view.View
 import android.webkit.WebView
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.mrguven.e_archivepdffileextractor.databinding.ActivityMainBinding
 import java.io.File
 import java.io.FileInputStream
 import java.util.zip.ZipEntry
@@ -21,45 +22,81 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
-                uri?.let { AppFileUtils.getPathFromUri(this, it)?.let { it1 -> convertFile(it1) } }
+                uri?.let { AppFileUtils.getPathFromUri(this, it)?.let { it1 -> selectFile(it1) } }
             }
         }
 
+    private var selectedFile: File? = null
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        findViewById<Button>(R.id.openFileButton).setOnClickListener {
+        setFileViewNotSelected()
+        setButtonClickListeners()
+    }
+
+    private fun setButtonClickListeners(){
+        binding.openFileButton.setOnClickListener {
             openFilePicker()
+        }
+        binding.closeButton.setOnClickListener {
+            selectedFile = null
+            setFileViewNotSelected()
+        }
+        binding.convertFileButton.setOnClickListener {
+            selectedFile?.let { performConversionOperations(it) }
         }
     }
 
+    private fun setFileViewSelected() {
+        selectedFile?.let {
+            binding.selectedFileView.setImageResource(R.drawable.ic_zip_file)
+            binding.selectedFileNameText.text = it.name
+            binding.openFileButton.visibility = View.GONE
+            binding.convertFileButton.visibility = View.VISIBLE
+            binding.closeButton.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setFileViewNotSelected() {
+        binding.selectedFileView.setImageResource(R.drawable.ic_blank_file)
+        binding.selectedFileNameText.text = getText(R.string.no_selected_file)
+        binding.openFileButton.visibility = View.VISIBLE
+        binding.convertFileButton.visibility = View.GONE
+        binding.closeButton.visibility = View.GONE
+    }
 
     private fun openFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"
+            // Set MIME type to filter only JSON files
+            type = "application/json"
         }
         pickFileLauncher.launch(intent)
     }
 
-    private fun convertFile(filePath: String) {
-        val file = File(filePath)
-        if (file.exists() && file.name.endsWith(".zip.json")) {
-            val newFile = File(file.parentFile, ZIP_FILE_NAME)
+    private fun selectFile(filePath: String?) {
+        filePath?.let {
+            val file = File(it)
+            if (file.exists() && file.name.endsWith(".zip.json")) {
+                selectedFile = File(file.parentFile, ZIP_FILE_NAME)
 
-            if (file.renameTo(newFile)) {
-                showToast(R.string.toast_file_converted, file.name, ZIP_FILE_NAME)
-                performConvertionOperations(newFile)
+                if (file.renameTo(selectedFile!!)) {
+                    showToast(R.string.toast_selected_file, ZIP_FILE_NAME, file.name)
+                    setFileViewSelected()
+                } else {
+                    showToast(R.string.toast_conversion_failed, file.name)
+                }
             } else {
-                showToast(R.string.toast_conversion_failed, file.name)
+                showToast(R.string.toast_invalid_file_selected)
             }
-        } else {
-            showToast(R.string.toast_invalid_file_selected)
-        }
+        } ?: showToast(R.string.toast_invalid_file_selected)
     }
 
-    private fun performConvertionOperations(file: File) {
+    private fun performConversionOperations(file: File) {
         val htmlContent = extractHtmlFileContentFromZip(file)
         htmlContent?.let { convertHtmlToPdf(it) }
     }
@@ -107,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         val printAdapter = webView.createPrintDocumentAdapter(PDF_FILE_NAME)
         val jobName = getString(R.string.app_name) + " Print"
         val printAttributes = PrintAttributes.Builder()
-            .setMediaSize(PrintAttributes.MediaSize.JIS_EXEC) // Set paper size here
+            .setMediaSize(PrintAttributes.MediaSize.ISO_C4) // Set paper size here
             .build()
         printManager.print(jobName, printAdapter, printAttributes)
     }

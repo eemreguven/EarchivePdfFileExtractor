@@ -2,8 +2,12 @@
     <string name="app_name">E-archive Pdf File Extractor</string>
     <string name="convert_new_file">CONVERT NEW FILE</string>
     <string name="toast_file_converted">File converted: %1\$s -> %2\$s</string>
+    <string name="toast_selected_file">%1\$s selected: %2\$s</string>
     <string name="toast_conversion_failed">Failed to convert file: %1\$s</string>
     <string name="toast_invalid_file_selected">Invalid file selected</string>
     <string name="toast_html_content_extracted">HTML content extracted from ZIP</string>
     <string name="toast_html_file_not_found">HTML file not found in the ZIP</string>
+    <string name="select_new_file">SELECT NEW FILE</string>
+    <string name="no_selected_file">No Selected File</string>
+    <string name="convert">Convert</string>
 </resources>

@@ -2,8 +2,12 @@
     <string name="app_name">E-arşiv Pdf Dosya Çıkarıcı</string>
     <string name="convert_new_file">YENİ DOSYA DÖNÜŞTÜR</string>
     <string name="toast_file_converted">Dosya dönüştürüldü: %1\$s -> %2\$s</string>
+    <string name="toast_selected_file">%1\$s seçildi: %2\$s</string>
     <string name="toast_conversion_failed">Dosya dönüştürülemedi: %1\$s</string>
     <string name="toast_invalid_file_selected">Geçersiz dosya seçildi</string>
     <string name="toast_html_content_extracted">HTML içeriği ZIP dosyasından çıkarıldı</string>
     <string name="toast_html_file_not_found">ZIP içerisinde HTML dosyası bulunamadı</string>
+    <string name="select_new_file">YENİ DOSYA SEÇ</string>
+    <string name="no_selected_file">Dosya Seçimi Yok</string>
+    <string name="convert">Dönüştür</string>
 </resources>
