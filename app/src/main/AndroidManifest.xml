@@ -13,6 +13,9 @@
         android:theme="@style/Theme.EarchivePdfFileExtractor"
         tools:targetApi="31">
         <activity
+            android:name=".ConvertActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
